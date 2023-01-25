@@ -1,45 +1,26 @@
 version: "3"
 services:
-  nginx:
-    image: jwilder/nginx-proxy:alpine
-    restart: unless-stopped
-    networks:
-      - frontend
-      - backend
-    ports:
-      - "443:443"
-    volumes:
-      - ./ssl:/etc/nginx/certs
-      - /var/run/docker.sock:/tmp/docker.sock:ro
-
   teampass-web:
     build: .
-    #image: teampass/teampass
+    image: teampass:2.1.27.36
     restart: unless-stopped
     environment:
       VIRTUAL_HOST: YOUR_HOSTNAME
       VIRTUAL_PORT: 80
       CERT_NAME: YOUR_CERTIFICATE
-    volumes:
-      - ./teampass-html:/var/www/html
-    networks:
-      - teampass-internal
-      - backend
+    ports:
+      - 8888:80
+
   db:
     restart: unless-stopped
     image: yobasystems/alpine-mariadb:latest
     environment:
-      MYSQL_ROOT_PASSWORD: YOUR_SUPERSECRET_PASSWORD
+      MYSQL_ROOT_PASSWORD: toor
       MYSQL_DATABASE: teampass
-      MYSQL_PASSWORD: YOUR_SECRET_PASSWORD
-      MYSQL_USER: teampass
+      MYSQL_PASSWORD: teampasspassword
+      MYSQL_USER: teampassuser
     volumes:
       - ./teampass-db:/var/lib/mysql
-    networks:
-      - teampass-internal
 
 networks:
   frontend:
-  backend:
-    external: true
-  teampass-internal:
