@@ -4,13 +4,16 @@ services:
     image: teampass:2.1.27.36
     restart: always
     volumes:
-      - ./volumes/teampass-conf:/var/www/html/teampass/include/config
+      - ./volumes/teampass-conf:/usr/share/nginx/html/includes/config
+      - ./volumes/teampass-keys:/usr/share/nginx/html/keys
+      - ./volumes/teampass-upload:/usr/share/nginx/html/upload
+      - ./volumes/teampass-files:/usr/share/nginx/html/files
     ports:
       - "80:80"
 
   db:
     restart: always
-    image: mysql/mysql-server:8.0
+    image: mysql/mysql-server:5.7
     environment:
       MYSQL_ROOT_PASSWORD: mypass
       MYSQL_DATABASE: teampass
